@@ -22,12 +22,14 @@ public class ScenesManager : MonoBehaviour
     {
         //tierTracker = FindObjectOfType<TierTracker>();
         //tierTracker.ResetScore();
-        SceneManager.LoadScene("Dialogue Scene");
+        if (tierTracker.tier3) SceneManager.LoadScene("Dialogue3 Scene");
+        else if (tierTracker.tier2) SceneManager.LoadScene("Dialogue2 Scene");
+        else SceneManager.LoadScene("Dialogue1 Scene");
     }
     public void LoadMainScene()
     {
-        //tierTracker = FindObjectOfType<TierTracker>();
-        //tierTracker.ResetScore();
+        tierTracker = FindObjectOfType<TierTracker>();
+        tierTracker.ResetScore();
         SceneManager.LoadScene("Main Scene");
     }
 
@@ -46,3 +48,4 @@ public class ScenesManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }*/
 }
+

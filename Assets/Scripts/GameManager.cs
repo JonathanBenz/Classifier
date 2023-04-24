@@ -14,23 +14,44 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite[] tier1Portraits;
     [SerializeField] Sprite[] tier2Portraits;
     [SerializeField] Sprite[] tier3Portraits;
+    private int imageIndex;
+
     string[] tier1Classifications = { };
-    string[] tier2Classifications = { 
-        "bisexual", "failure", "poor", "sexually active", "melancholic", "wimpy", "schizophrenic", 
-        "unsuccessful", "pansexual", "liberal", "conservative", "convict", "second-rater", "loser", 
-        "basic", "unskilled", "uncool", "weakling", "sensitive", "introverted", "orphan", "impudent", 
-        "crazy", "sad"
+    string[] tier2Classifications = {
+        "bisexual", "failure", "poor", "melancholic", "wimpy", "schizophrenic",
+        "unsuccessful", "pansexual", "liberal", "conservative", "convict", "second-rater", "loser",
+        "basic", "unskilled", "uncool", "weakling", "sensitive", "introverted", "orphan", "impudent",
+        "crazy", "sad", "dumb"
         };
-    string[] tier3Classifications = { 
-        "cocksucker", "homosexual closet queen", "motherfucker", "pervert", "drug junkie", "whore", 
+    string[] tier3Classifications = {
+        "cocksucker", "homosexual closet queen", "motherfucker", "pervert", "drug junkie", "whore",
         "bitch", "slut", "pedophile", "child molester", "rape suspect", "school shooter", "suicide bomber",
-        "cunt", "transvestite", "street rat", "dickhead", "slave", "envious beta male", "incel"
+        "cunt", "transvestite", "street rat", "dickhead", "slave", "incel"
         };
+
+    TierTracker tierTracker;
+    AudioPlayer audioPlayer;
+
+    private void Awake()
+    {
+        tierTracker = FindObjectOfType<TierTracker>();
+        audioPlayer = FindObjectOfType<AudioPlayer>();
+    }
     // Start is called before the first frame update
     void Start()
     {
-        portraitFrame.sprite = tier2Portraits[0];
-        GenerateButtonTexts(leftButtonText, rightButtonText, tier2Classifications);
+        imageIndex = 0;
+        if (tierTracker.tier2)
+        {
+            portraitFrame.sprite = tier2Portraits[imageIndex];
+            GenerateButtonTexts(leftButtonText, rightButtonText, tier2Classifications);
+        }
+        else if (tierTracker.tier3)
+        {
+            portraitFrame.sprite = tier3Portraits[imageIndex];
+            GenerateButtonTexts(leftButtonText, rightButtonText, tier3Classifications);
+        }
+
         //Debug.Log(tier2Classifications.Length);
         //Debug.Log(tier3Classifications.Length);
 
@@ -39,7 +60,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void GenerateButtonTexts(TextMeshProUGUI lb, TextMeshProUGUI rb, string[] array)
@@ -48,7 +69,7 @@ public class GameManager : MonoBehaviour
         int randomIndex2 = (int)Random.Range(0f, array.Length - 1);
         if (randomIndex2 == randomIndex1)
         {
-            while(randomIndex2 == randomIndex1)
+            while (randomIndex2 == randomIndex1)
             {
                 randomIndex2 = (int)Random.Range(0f, array.Length - 1);
             }
@@ -57,18 +78,26 @@ public class GameManager : MonoBehaviour
         rb.text = array[randomIndex2];
     }
 
-    void GenerateCorrectChoice(Button button)
+    public void GenerateCorrectChoice(Button button)
     {
-        int coinToss = (int) Random.Range(0f, 1f);
-        if(coinToss == 1)
+        // audioPlayer.PlayClickSoundClip();
+        float coinToss = Random.Range(0f, 1f);
+        if (tierTracker.tier2)
         {
-            button.isCorrect 
-            score++
+            if (coinToss >= .4f) tierTracker.ModifyScore(1);
+            else tierTracker.ModifyScore(-1);
+            portraitFrame.sprite = tier2Portraits[++imageIndex];
         }
-        else score--
-        loadNextImage();
+        else if (tierTracker.tier3)
+        {
+            if (coinToss >= .7f) tierTracker.ModifyScore(1);
+            else tierTracker.ModifyScore(-1);
+            portraitFrame.sprite = tier3Portraits[++imageIndex];
+        }
     }
 }
 
 //What if for tier 3 we have it where after picking the incorrect choice enough times, the AI will
 //call out the evil researcher and kill itself 
+
+
