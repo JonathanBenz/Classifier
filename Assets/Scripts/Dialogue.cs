@@ -7,6 +7,8 @@ using TMPro;
 // Credit to the video "5 Minute DIALOGUE SYSTEM in UNITY Tutorial" by YouTuber BMo for this script.
 public class Dialogue : MonoBehaviour
 {
+    [SerializeField] Image researcher;
+    [SerializeField] Image ai;
     [SerializeField] TextMeshProUGUI textComponent;
     [SerializeField] Image dialogueIndicator;
     [SerializeField] float dialogueIndicatorTransformSpeed;
@@ -38,6 +40,8 @@ public class Dialogue : MonoBehaviour
                 textComponent.text = lines[index];
             }
         }
+
+        HighlightSprite();
     }
 
     void StartDialogue()
@@ -72,5 +76,27 @@ public class Dialogue : MonoBehaviour
         float max = startingPoint - 5;
         dialogueIndicator.transform.position += new Vector3(0, dialogueIndicatorTransformSpeed * Time.deltaTime, 0);
         if (dialogueIndicator.transform.position.y >= min || dialogueIndicator.transform.position.y <= max) dialogueIndicatorTransformSpeed = -dialogueIndicatorTransformSpeed;
+    }
+
+    void HighlightSprite()
+    {
+        if (textComponent.text[0] == 'R')
+        {
+            var researcherColor = researcher.color;
+            var aiColor = ai.color;
+            researcherColor.a = 1f;
+            aiColor.a = 0.5f;
+            researcher.color = researcherColor;
+            ai.color = aiColor;
+        }
+        else
+        {
+            var researcherColor = researcher.color;
+            var aiColor = ai.color;
+            researcherColor.a = 0.5f;
+            aiColor.a = 1f;
+            researcher.color = researcherColor;
+            ai.color = aiColor;
+        }
     }
 }

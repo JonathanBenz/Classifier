@@ -80,19 +80,21 @@ public class GameManager : MonoBehaviour
 
     public void GenerateCorrectChoice(Button button)
     {
-        // audioPlayer.PlayClickSoundClip();
+        audioPlayer.PlayClickSoundClip();
         float coinToss = Random.Range(0f, 1f);
         if (tierTracker.tier2)
         {
             if (coinToss >= .4f) tierTracker.ModifyScore(1);
             else tierTracker.ModifyScore(-1);
             portraitFrame.sprite = tier2Portraits[++imageIndex];
+            GenerateButtonTexts(leftButtonText, rightButtonText, tier2Classifications);
         }
         else if (tierTracker.tier3)
         {
             if (coinToss >= .7f) tierTracker.ModifyScore(1);
             else tierTracker.ModifyScore(-1);
             portraitFrame.sprite = tier3Portraits[++imageIndex];
+            GenerateButtonTexts(leftButtonText, rightButtonText, tier3Classifications);
         }
     }
 }
