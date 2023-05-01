@@ -14,29 +14,41 @@ public class ScenesManager : MonoBehaviour
     }
     public void LoadMainMenu()
     {
-        //scoreKeeper = FindObjectOfType<ScoreKeeper>();
-        //scoreKeeper.ResetScore();
+        tierTracker = FindObjectOfType<TierTracker>();
+        tierTracker.ResetScore();
         SceneManager.LoadScene(0);
     }
     public void LoadDialogueScene()
     {
-        //tierTracker = FindObjectOfType<TierTracker>();
-        //tierTracker.ResetScore();
         if (tierTracker.tier3) SceneManager.LoadScene("Dialogue3 Scene");
         else if (tierTracker.tier2) SceneManager.LoadScene("Dialogue2 Scene");
         else SceneManager.LoadScene("Dialogue1 Scene");
     }
-    public void LoadMainScene()
+    public void LoadFailureScene()
     {
         tierTracker = FindObjectOfType<TierTracker>();
         tierTracker.ResetScore();
-        SceneManager.LoadScene("Main Scene");
+        SceneManager.LoadScene("Failure Scene");
+    }
+    public void LoadMainScene()
+    {
+        if (tierTracker.endGame)
+        {
+            tierTracker.endGame = false;
+            LoadMainMenu();
+        }
+        else
+        {
+            tierTracker = FindObjectOfType<TierTracker>();
+            tierTracker.ResetScore();
+            SceneManager.LoadScene("Main Scene");
+        }
     }
 
-    /*public void LoadGameOver()
+    public void LoadEndScene()
     {
-        StartCoroutine(WaitAndLoad("GameOver", sceneLoadDelay));
-    }*/
+        SceneManager.LoadScene("End Scene");
+    }
 
     public void QuitGame()
     {

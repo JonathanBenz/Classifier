@@ -7,20 +7,22 @@ public class TierTracker : MonoBehaviour
     [SerializeField] int score;
     [SerializeField] int numIncorrect;
     public bool tier1 = true;
-    public bool tier2 = true;
+    public bool tier2;
     public bool tier3;
+    public bool endGame;
     private void Awake()
     {
         ManageSingleton();
     }
     private void Update()
     {
-        TrackTier();
+        //TrackTier();
+        ResetTiers();
     }
     public int GetScore() { return score; }
     public void ModifyScore(int value) { score += value; if (value < 0) numIncorrect++; if (score < 0) score = 0; }
     public void ResetScore() { score = 0; numIncorrect = 0; }
-    public void TrackTier()
+    /* public void TrackTier()
     {
         if (score >= 8) UnlockNextTier();
     }
@@ -28,6 +30,14 @@ public class TierTracker : MonoBehaviour
     {
         if (!tier2 && !tier3) tier2 = true;
         if (tier2 && !tier3) tier3 = true;
+    } */
+    void ResetTiers()
+    {
+        if(endGame)
+        {
+            tier2 = false;
+            tier3 = false;
+        }
     }
 
     void ManageSingleton()
